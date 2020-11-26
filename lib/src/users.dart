@@ -33,11 +33,12 @@ class UsersApi {
 class User {
   User.fromJson(Map<String, dynamic> user)
       : id = user.getIntOrNull("id"),
+        isAdmin = user.getBoolOr("is_admin", false),
         name = user.getStringOrNull("name"),
         username = user.getStringOrNull("username"),
         email = user.getStringOrNull("email"),
         publicEmail = user.getStringOrNull("public_email"),
-        state = user.getStringOrNull("state"),
+        state = user.getStringOr("state", "unknown"),
         avatarUrl = user.getStringOrNull("avatar_url"),
         webUrl = user.getStringOrNull("web_url"),
         bio = user.getStringOrNull("bio"),
@@ -54,6 +55,7 @@ class User {
         twoFactorEnabled = user.getBoolOr("two_factor_enabled", false);
 
   final int id;
+  bool isAdmin;
   String name;
   String username;
   String state;
