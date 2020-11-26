@@ -102,10 +102,10 @@ class GitLab {
       bool asJson: true}) async {
     final headers = <String, String>{'PRIVATE-TOKEN': token};
 
-    _log.fine('Making GitLab $method request to $uri.');
+    _log.info('Making GitLab $method request to $uri.');
 
-    stdout.writeln('>> Making $method request to $uri.');
-    stdout.writeln('>> Headers $headers');
+    _log.info('>> Making $method request to $uri.');
+    _log.info('>> Headers $headers');
 
     final response = await _httpClient.request(uri, headers, method);
 
@@ -120,7 +120,7 @@ class GitLab {
       response.headers["content-type"] = "$contentType; charset=utf-8";
     }
 
-    stdout.writeln('Response ${response.body}');
+    _log.info(('Response ${response.body}');
 
     return asJson ? jsonDecode(response.body) : response.body;
   }
