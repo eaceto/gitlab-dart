@@ -11,7 +11,7 @@ dependencies:
   gitlab: any
     git:
       url: https://github.com/eaceto/gitlab-dart.git
-      ref: master
+      ref: main
 
 ```
 
