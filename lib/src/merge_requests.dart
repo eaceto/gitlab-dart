@@ -41,9 +41,7 @@ class MergeRequestsApi {
 
     final uri = buildUri(['merge_requests'],
         queryParameters: queryParameters, page: page, perPage: perPage);
-
-    stdout.writeln("URL: $uri");
-
+        
     final jsonList = _responseToList(await _gitLab.request(uri));
 
     return jsonList.map((json) => new MergeRequest.fromJson(json)).toList();
