@@ -92,6 +92,8 @@ class GitLab {
   /// You can safely store the returned object and reuse it.
   ProjectsApi project(int id) => new ProjectsApi.withProjectId(this, id);
 
+  UsersApi users() => UsersApi(this);
+
   /// Returns the decoded JSON.
   @visibleForTesting
   Future<dynamic> request(Uri uri,
