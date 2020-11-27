@@ -17,6 +17,17 @@ class UsersApi {
     return User.fromJson(json);
   }
 
+  Future<UserStatus> getUserStatus(int userId) async {
+    final uri = this._gitLab.buildUri(
+      ['users', userId.toString(), 'status'],
+    );
+
+    final json = await this._gitLab.request(uri, method: HttpMethod.get)
+        as Map<String, dynamic>;
+
+    return UserStatus.fromJson(json);
+  }
+
   /// Gets the current [User] info
   Future<User> me() async {
     final uri = this._gitLab.buildUri(
@@ -28,6 +39,29 @@ class UsersApi {
 
     return User.fromJson(json);
   }
+
+  /// Gets the status of the current [User]
+  Future<UserStatus> myStatus() async {
+    final uri = this._gitLab.buildUri(
+      ['user', 'status'],
+    );
+
+    final json = await this._gitLab.request(uri, method: HttpMethod.get)
+        as Map<String, dynamic>;
+
+    return UserStatus.fromJson(json);
+  }
+}
+
+class UserStatus {
+  UserStatus.fromJson(Map<String, dynamic> userStatus)
+      : emoji = userStatus.getStringOrNull("emoji"),
+        message = userStatus.getStringOrNull("message"),
+        messageHtml = userStatus.getStringOrNull("message_html");
+
+  String emoji;
+  String message;
+  String messageHtml;
 }
 
 class User {

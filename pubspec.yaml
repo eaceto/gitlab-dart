@@ -1,7 +1,7 @@
 name: gitlab
 # Increasing this version number *automatically* publishes this package
 # when merged into master.
-version: 0.8.8
+version: 0.8.9
 description: A library to communicate with the GitLab API
 homepage: https://gitlab.com/exitlive/gitlab-dart
 author: Matias Meno <m@tias.me>
