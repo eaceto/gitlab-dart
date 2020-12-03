@@ -41,7 +41,7 @@ class MergeRequestsApi {
 
     final uri = buildUri(['merge_requests'],
         queryParameters: queryParameters, page: page, perPage: perPage);
-        
+
     final jsonList = _responseToList(await _gitLab.request(uri));
 
     return jsonList.map((json) => new MergeRequest.fromJson(json)).toList();
@@ -84,6 +84,39 @@ class MergeRequestsApi {
     final json = await _gitLab.request(
       uri,
       method: HttpMethod.post,
+    ) as Map<String, dynamic>;
+
+    return MergeRequest.fromJson(json);
+  }
+
+  /// Accept a Merge Request by MRiid
+  ///
+  /// See https://docs.gitlab.com/ee/api/merge_requests.html#accept-mr
+  Future<MergeRequest> accept(mergeRequestIid,
+      {bool shouldRemoveSourceBranch = false,
+      bool squash = false,
+      bool mergeWhenPipelineSucceeds = false,
+      String mergeCommitMessage,
+      String squashCommitMessage}) async {
+    final queryParameters = <String, dynamic>{
+      if (shouldRemoveSourceBranch == true) "should_remove_source_branch": true,
+      if (squash == true) "squash": true,
+      if (mergeWhenPipelineSucceeds == true)
+        "merge_when_pipeline_succeeds": true,
+      if (mergeCommitMessage != null && mergeCommitMessage.isNotEmpty)
+        "merge_commit_message": mergeCommitMessage,
+      if (squashCommitMessage != null && squashCommitMessage.isNotEmpty)
+        "squash_commit_message": squashCommitMessage
+    };
+
+    final uri = buildUri(
+      ['merge_requests', mergeRequestIid.toString(), 'merge'],
+      queryParameters: queryParameters,
+    );
+
+    final json = await _gitLab.request(
+      uri,
+      method: HttpMethod.put,
     ) as Map<String, dynamic>;
 
     return MergeRequest.fromJson(json);
