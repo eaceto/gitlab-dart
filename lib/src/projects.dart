@@ -58,7 +58,8 @@ class ProjectsApi {
 
   SnippetsApi _snippetsApi;
 
-  SnippetsApi get snippets => _snippetsApi ??= SnippetsApi.withProject(_gitLab, this);
+  SnippetsApi get snippets =>
+      _snippetsApi ??= SnippetsApi.withProject(_gitLab, this);
 
   CommitsApi _commitsApi;
 
@@ -76,6 +77,22 @@ class ProjectsApi {
   ReleasesApi _releasesApi;
 
   ReleasesApi get releases => _releasesApi ??= new ReleasesApi(_gitLab, this);
+
+  /// Fetch info of the current project
+  Future<Project> project({int projectId}) async {
+    if (projectId == null) {
+      projectId = id;
+    }
+    final queryParameters = <String, dynamic>{};
+    queryParameters['statistics'] = true;
+
+    final uri = _gitLab.buildUri(['projects', projectId.toString()],
+        queryParameters: queryParameters);
+
+    final json = await _gitLab.request(uri) as Map<String, dynamic>;
+
+    return new Project.fromJson(json);
+  }
 
   /// List all [Project] visible by the user's access token.
   Future<List<Project>> listAllProjects(
