@@ -83,11 +83,8 @@ class ProjectsApi {
     if (projectId == null) {
       projectId = id;
     }
-    final queryParameters = <String, dynamic>{};
-    queryParameters['statistics'] = true;
 
-    final uri = _gitLab.buildUri(['projects', projectId.toString()],
-        queryParameters: queryParameters);
+    final uri = _gitLab.buildUri(['projects', projectId.toString()]);
 
     final json = await _gitLab.request(uri) as Map<String, dynamic>;
 
