@@ -17,6 +17,33 @@ class MergeRequestsApi {
     return new MergeRequest.fromJson(json);
   }
 
+  Future<MergeRequestApproval> getApprovalInfo(int iid) async {
+    final pathSegments = ['merge_requests', '$iid', 'approval_state'];
+    final uri = buildUri(pathSegments);
+
+    final json = await _gitLab.request(uri) as Map;
+
+    return new MergeRequestApproval.fromJson(json);
+  }
+
+  Future<MergeRequestApproval> approve(int iid) async {
+    final pathSegments = ['merge_requests', '$iid', 'approve'];
+    final uri = buildUri(pathSegments);
+
+    final json = await _gitLab.request(uri) as Map;
+
+    return new MergeRequestApproval.fromJson(json);
+  }
+
+  Future<MergeRequestApproval> unapprove(int iid) async {
+    final pathSegments = ['merge_requests', '$iid', 'unapprove'];
+    final uri = buildUri(pathSegments);
+
+    final json = await _gitLab.request(uri) as Map;
+
+    return new MergeRequestApproval.fromJson(json);
+  }
+
   Future<List<MergeRequest>> list(
       {MergeRequestState state,
       MergeRequestOrderBy orderBy,
@@ -259,4 +286,37 @@ class MergeRequest {
 
   @override
   String toString() => 'MergeRequest id#$id iid#$iid ($title)';
+}
+
+class MergeRequestApproval {
+  final Map originalJson;
+
+  MergeRequestApproval.fromJson(this.originalJson);
+
+  int get id => originalJson['id'] as int; // approval ID
+
+  int get iid => originalJson['iid'] as int; // Merge Request ID
+
+  int get projectId => originalJson['project_id'] as int; // Project ID
+
+  String get title => originalJson['title'] as String;
+
+  String get description => originalJson['description'] as String;
+
+  String get state => originalJson['state'] as String;
+
+  int get approvalsRequired => originalJson['approvals_required'] as int;
+
+  int get approvalsLeft => originalJson['approvals_left'] as int;
+
+  List<User> get approvedBy => originalJson['approved_by'] == null
+      ? null
+      : (originalJson['approved_by'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .map((e) => User.fromJson(e))
+          .toList();
+
+  @override
+  String toString() =>
+      'MergeRequest Approval id#$id iid#$iid projectId($projectId)';
 }
