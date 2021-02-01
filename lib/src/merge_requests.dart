@@ -26,6 +26,20 @@ class MergeRequestsApi {
     return new MergeRequestApproval.fromJson(json);
   }
 
+  Future<MergeRequest> merge(
+      int iid, bool mergeWhenPipelineSucceeds, bool removeSourceBranch) async {
+    final pathSegments = ['merge_requests', '$iid', 'merge'];
+    final uri = buildUri(pathSegments);
+
+    final json = await _gitLab.request(uri,
+            method: HttpMethod.put,
+            body:
+                "{\"merge_when_pipeline_succeeds\": $mergeWhenPipelineSucceeds, \"should_remove_source_branch\": $removeSourceBranch}")
+        as Map;
+
+    return new MergeRequest.fromJson(json);
+  }
+
   Future<MergeRequestApproval> approve(int iid) async {
     final pathSegments = ['merge_requests', '$iid', 'approve'];
     final uri = buildUri(pathSegments);
