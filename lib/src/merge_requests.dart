@@ -18,7 +18,7 @@ class MergeRequestsApi {
   }
 
   Future<MergeRequestApproval> getApprovalInfo(int iid) async {
-    final pathSegments = ['merge_requests', '$iid', 'approval_state'];
+    final pathSegments = ['merge_requests', '$iid', 'approvals'];
     final uri = buildUri(pathSegments);
 
     final json = await _gitLab.request(uri) as Map;
