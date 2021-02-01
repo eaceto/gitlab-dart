@@ -30,7 +30,10 @@ class MergeRequestsApi {
     final pathSegments = ['merge_requests', '$iid', 'approve'];
     final uri = buildUri(pathSegments);
 
-    final json = await _gitLab.request(uri) as Map;
+    final json = await _gitLab.request(
+      uri,
+      method: HttpMethod.post,
+    ) as Map;
 
     return new MergeRequestApproval.fromJson(json);
   }
@@ -39,7 +42,10 @@ class MergeRequestsApi {
     final pathSegments = ['merge_requests', '$iid', 'unapprove'];
     final uri = buildUri(pathSegments);
 
-    final json = await _gitLab.request(uri) as Map;
+    final json = await _gitLab.request(
+      uri,
+      method: HttpMethod.post,
+    ) as Map;
 
     return new MergeRequestApproval.fromJson(json);
   }
