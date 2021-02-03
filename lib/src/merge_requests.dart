@@ -238,10 +238,41 @@ class MergeRequestsApi {
   }
 }
 
+enum MergeStatus { canBeMerged, cannotBeMerged, unchecked }
 enum MergeRequestState { merged, opened, closed }
 enum MergeRequestOrderBy { createdAt, updatedAt }
 enum MergeRequestSort { asc, desc }
 enum MergeRequestScope { all, createdByMe, assignedToMe }
+
+extension MergeStatusToAPI on MergeStatus {
+  String toAPIString() {
+    if (this == MergeStatus.canBeMerged) {
+      return "can_be_merged";
+    }
+    if (this == MergeStatus.cannotBeMerged) {
+      return "cannot_be_merged";
+    }
+    if (this == MergeStatus.unchecked) {
+      return "unchecked";
+    }
+    return this.toString().split('.').last;
+  }
+}
+
+extension MergeRequestScopeToAPI on MergeRequestScope {
+  String toAPIString() {
+    if (this == MergeRequestScope.all) {
+      return "all";
+    }
+    if (this == MergeRequestScope.createdByMe) {
+      return "created_by_me";
+    }
+    if (this == MergeRequestScope.assignedToMe) {
+      return "assigned_to_me";
+    }
+    return this.toString().split('.').last;
+  }
+}
 
 class MergeRequest {
   final Map originalJson;
@@ -303,6 +334,26 @@ class MergeRequest {
   String get mergeStatus => originalJson['merge_status'] == null
       ? "unknown"
       : originalJson['merge_status'] as String;
+
+  bool get canIMerge => originalJson['user'] == null
+      ? false
+      : originalJson['user']['can_merge'] == null
+          ? false
+          : originalJson['user']['can_merge'] as bool;
+
+  String get mergeError => originalJson['merge_error'] as String;
+
+  bool get squash =>
+      originalJson['squash'] == null ? false : originalJson['squash'] as bool;
+
+  bool get workInProgress => originalJson['work_in_progress'] == null
+      ? false
+      : originalJson['work_in_progress'] as bool;
+
+  bool get shouldRemoveSourceBranch =>
+      originalJson['should_remove_source_branch'] == null
+          ? false
+          : originalJson['should_remove_source_branch'] as bool;
 
   @override
   String toString() => 'MergeRequest id#$id iid#$iid ($title)';
