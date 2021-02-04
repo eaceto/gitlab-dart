@@ -346,6 +346,10 @@ class MergeRequest {
   bool get squash =>
       originalJson['squash'] == null ? false : originalJson['squash'] as bool;
 
+  String get closedBy => originalJson['closed_by'] as String;
+
+  String get closedAt => originalJson['closed_at'] as String;
+
   bool get workInProgress => originalJson['work_in_progress'] == null
       ? false
       : originalJson['work_in_progress'] as bool;
