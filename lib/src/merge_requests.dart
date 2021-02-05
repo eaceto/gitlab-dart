@@ -238,22 +238,40 @@ class MergeRequestsApi {
   }
 }
 
-enum MergeStatus { canBeMerged, cannotBeMerged, unchecked }
-enum MergeRequestState { merged, opened, closed }
+enum MergeRequestMergeStatus { canBeMerged, cannotBeMerged, unchecked }
+enum MergeRequestState { merged, opened, closed, reopened }
 enum MergeRequestOrderBy { createdAt, updatedAt }
 enum MergeRequestSort { asc, desc }
 enum MergeRequestScope { all, createdByMe, assignedToMe }
 
-extension MergeStatusToAPI on MergeStatus {
+extension MergeRequestMergeStatusToAPI on MergeRequestMergeStatus {
   String toAPIString() {
-    if (this == MergeStatus.canBeMerged) {
+    if (this == MergeRequestMergeStatus.canBeMerged) {
       return "can_be_merged";
     }
-    if (this == MergeStatus.cannotBeMerged) {
+    if (this == MergeRequestMergeStatus.cannotBeMerged) {
       return "cannot_be_merged";
     }
-    if (this == MergeStatus.unchecked) {
+    if (this == MergeRequestMergeStatus.unchecked) {
       return "unchecked";
+    }
+    return this.toString().split('.').last;
+  }
+}
+
+extension MergeRequestStateToAPI on MergeRequestState {
+  String toAPIString() {
+    if (this == MergeRequestState.merged) {
+      return "merged";
+    }
+    if (this == MergeRequestState.opened) {
+      return "opened";
+    }
+    if (this == MergeRequestState.closed) {
+      return "closed";
+    }
+    if (this == MergeRequestState.reopened) {
+      return "reopened";
     }
     return this.toString().split('.').last;
   }
